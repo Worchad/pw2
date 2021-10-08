@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <title>{{ titulo }}</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+</head>
+
+<body>
+    <form id="frmLogin" class="formulario" method="GET">
+        <label for="txtCorreo">Correo</label>
+        <input type="email" name="txtCorreo" id="txtCorreo" placeholder="Ingrese su correo">
+        <label for="txtPassword">Password</label>
+        <input type="password" name="txtPassword" id="txtPassword" placeholder="Ingrese su correo">
+        <button type="submit">Enviar</button>
+    </form>
+    <script src="{{ url_for('static', filename='jquery.min.js') }}"></script>
+    <script>
+        $("#frmLogin").submit(function(e) {
+            e.preventDefault();
+            var correo = $("#txtCorreo").val();
+            alert(correo);
+        });
+    </script>
+</body>
+
+</html>

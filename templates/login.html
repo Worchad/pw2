@@ -9,20 +9,20 @@
 </head>
 
 <body>
-    <form id="frmLogin" class="formulario" method="GET">
+    <form id="frmLogin" action="{{ url_for('procesarCredenciales') }}" class="formulario" method="POST">
         <label for="txtCorreo">Correo</label>
-        <input type="email" name="txtCorreo" id="txtCorreo" placeholder="Ingrese su correo">
-        <label for="txtPassword">Comtraseña</label>
-        <input type="password" name="txtPassword" id="txtPassword" placeholder="Ingrese su correo">
+        <input type="email" name="txtCorreo" id="txtCorreo2" placeholder="Ingrese su correo">
+        <label for="txtPassword">Contraseña</label>
+        <input type="password" name="txtPassword" id="txtPassword2" placeholder="Ingrese su correo">
         <button type="submit">Enviar</button>
     </form>
     <script src="{{ url_for('static', filename='jquery.min.js') }}"></script>
     <script>
-        $("#frmLogin").submit(function(e) {
-            e.preventDefault();
-            var correo = $("#txtCorreo").val();
-            alert(correo);
-        });
+        /* $("#frmLogin").submit(function(e) {
+                                                                                            e.preventDefault();
+                                                                                            var correo = $("#txtCorreo").val();
+                                                                                            alert(correo);
+                                                                                        });*/
     </script>
 </body>
 

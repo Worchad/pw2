@@ -8,7 +8,108 @@
 </head>
 
 <body>
-    <h4>Bienvenido</h4>
+    <form id="frmRegUsuarios">
+        <label for="txtCorreo">Correo</label>
+        <input type="email" name="txtCorreo" id="txtCorreo">
+        <label for="txtPassword">Contraseña</label>
+        <input type="password" name="txtPassword" id="txtPassword">
+        <input type="hidden" name="txtCodigo" id="txtCodigo">
+        <button type="submit">Enviar Datos</button>
+    </form>
+    <hr>
+    <table>
+        <thead>
+            <tr>
+                <th>Id.</th>
+                <th>Correo</th>
+                <th>Contraseña</th>
+            </tr>
+        </thead>
+        <tbody id="listUsuarios">
+            
+        </tbody>
+    </table>
+    <script src="{{ url_for('static', filename='jquery.min.js') }}"> 
+    </script>
+    <script>
+        $(document).ready(function () {
+            obtenerUsuarios();
+        });
+        function obtenerUsuarios(cod = ""){
+            $.ajax({
+                type: "POST",
+                data: {
+                    cod
+                },
+                url: "/obtener_usuarios",
+                success: function (data) {
+                    var r = JSON.parse(data);
+                    var h = "";
+                    for (var i = 0, len = r.length; i < len; i++) {
+                        h += '<tr>';
+                        h += '<td>'+r[i].usua_id+'</td>';
+                        h += '<td>' + r[i].usua_correo + '</td>';
+                        h += '<td>' + r[i].usua_password + '</td>';
+                        h += '<td><button type="button" class="btnEditar" value="' + r[i].usua_id +'">Editar</button><button type="button" class="btnEliminar" value="' + r[i].usua_id +'">Eliminar</button></td>';
+                        h += '</tr>';
+                    }
+                    $("#listUsuarios").html(h);
+                    $(".btnEditar").click(function(e){
+                        e.preventDefault();
+                        var cod = $(this).val();
+                        $.ajax({
+                            type: "POST",
+                            url: "/obtener_usuarios",
+                            data: {cod},
+                            success: function (data) {
+                                var r = JSON.parse(data);
+                                $("#txtCorreo").val(r[0].usua_correo);
+                                $("#txtPassword").val(r[0].usua_password);
+                                $("#txtCodigo").val(r[0].usua_id);
+                            }
+                        });
+                    });
+                     $(".btnEliminar").click(function (e) {
+                        e.preventDefault();
+                        var cod = $(this).val();
+                        $.ajax({
+                            type: "POST",
+                            url: "/baja_usuarios",
+                            data: { cod },
+                            success: function (data) {
+                                var r = JSON.parse(data);
+                                alert(r);
+                                obtenerUsuarios();
+                            }
+                        });
+                    });
+                }
+            });
+        }
+
+        $("#frmRegUsuarios").submit(function(e){
+            e.preventDefault();
+            var usuaId = $("#txtCodigo").val();
+            var urlf = "";
+            if(usuaId==""){
+                urlf = "/alta_usuarios";
+            }else{
+                urlf = "/modificacion_usuarios";
+            }
+            var form = $(this).serialize();
+            $.ajax({
+                type: "POST",
+                url: urlf,
+                data: form,
+                success: function (data) {
+                    var r = JSON.parse(data);
+                    alert(r);
+                    $("#frmRegUsuarios").trigger('reset');
+                    obtenerUsuarios();
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>
